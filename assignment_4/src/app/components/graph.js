@@ -130,8 +130,8 @@ const Graph = () => {
         const filteredLinks = graphData.links.filter(d => d.value > minEdgeWeight);
         
         const simulation = forceSimulation(graphData.nodes) // create a new simulation with the nodes
-            .force('link', forceLink(filteredLinks).id(d => d.index).distance(50))
-            .force('charge', forceManyBody().distanceMax(200).strength(-100)) 
+            .force('link', forceLink(filteredLinks).id(d => d.index).distance(100))
+            .force('charge', forceManyBody().distanceMax(80).strength(-150)) 
             .force('center', forceCenter(width / 2, height / 2)); 
 
         const link = svg.append('g') 
@@ -152,11 +152,7 @@ const Graph = () => {
             .attr('fill', d => d.colour) 
             .call(dragHandler(simulation)) // apply drag function to all nodes
             .on('click', (event, d) => {
-                if (selectedNode === d.name) { // doesnt work
-                    setSelectedNode(null);
-                    setSelectedNodeData(null);
-                    console.log("selected node is null");
-                } else {
+                 
                     setSelectedNode(d.name);
                     const connectedNodes = graphData.links
                         .filter(link => link.source.name === d.name || link.target.name === d.name)
@@ -170,7 +166,7 @@ const Graph = () => {
                         connections: connectedNodes
                     });
                 }
-            });
+            );
         const labels = svg.append('g')
             .selectAll('text')
             .data(graphData.nodes)
@@ -246,7 +242,7 @@ const Graph = () => {
                     id="minNodeWeight"
                     type="range"
                     min="1"
-                    max="20"
+                    max="80"
                     value={minEdgeWeight}
                     onChange={e => setMinEdgeWeight(Number(e.target.value))}
                     className="w-full"
